@@ -145,7 +145,14 @@ function createTransaction(
   if (feePayerKey !== undefined) {
     // if senderKey is provided, fetch account to get nonce and mark to be signed
     let senderAddress = feePayerKey.toPublicKey();
-    let senderAccount = getAccount(senderAddress, TokenId.default);
+
+    let nonce_;
+    if (nonce === undefined) {
+      let senderAccount = getAccount(senderAddress, TokenId.default);
+      nonce_ = senderAccount.nonce;
+    } else {
+      nonce_ = UInt32.fromNumber(nonce);
+    }
     feePayerAccountUpdate = AccountUpdate.defaultFeePayer(
       senderAddress,
       feePayerKey,
